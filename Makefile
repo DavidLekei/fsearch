@@ -13,7 +13,7 @@ MPIFLAGS := -Wall -I$(INC_DIR) -D USE_MPI
 CFLAGS   := -Wall -I$(INC_DIR)
 DEBUGFLAGS := -Wall -I$(INC_DIR) -O0 -ggdb -D DEBUG
 LDFLAGS  := -Llib
-LDLIBS   := -lm -lpthread
+LDLIBS   := -lpthread
 
 
 all: objs exe
