@@ -8,7 +8,7 @@
 
 # Usage:
 
-> fsearch <filename> [OPTIONS]
+> fsearch \<filename> [OPTIONS]
 
 Available Options:
 
