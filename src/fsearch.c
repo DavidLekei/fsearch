@@ -12,6 +12,7 @@
 #include <signal.h>
 
 #include "fsearch.h"
+#include "gui.h"
 
 char* file;
 char buf[MAX_BUF_SIZE];
@@ -76,7 +77,7 @@ int main(int argc, char* argv[])
 void parse_cmdline(int argc, char* argv[], fsearch_opt_t* opts)
 {
 	int opt;
-	const char* optstring = "dp:s:t:";
+	const char* optstring = "dgp:s:t:";
 
 	opterr = 0;
 	opt = getopt(argc, argv, optstring);
@@ -86,6 +87,9 @@ void parse_cmdline(int argc, char* argv[], fsearch_opt_t* opts)
 		{
 			case 'd':
 				printf("DEBUG Mode Enabled.\n");
+				break;
+			case 'g':
+				create_gui();
 				break;
 			case 'p':
 				if(USING_MPI == 1)
@@ -100,10 +104,6 @@ void parse_cmdline(int argc, char* argv[], fsearch_opt_t* opts)
 			case 's':
 				opts->start_loc = optarg;
 				dprint("[+] Set fsearch opts start_loc -> %s\n", opts->start_loc);
-				break;
-			case 't':
-				opts->num_threads = atoi(optarg);
-				// printf("Using %d Threads.\n", threads);
 				break;
 			default:
 				printf("Unknown Command Line Argument: %c\n", opt);
@@ -199,7 +199,6 @@ void search_dir(char* path)
 		dprint("[x] Not Searching /.\n");
 		return;
 	}
-	//dprint("[+] Searching: %s [THREAD %lu]\n", path, thread_id);
 	DIR* dir = opendir(path);
 	struct dirent* entry;
 
@@ -301,14 +300,8 @@ void setup_timer(struct itimerval* timer, struct sigaction* sa)
 
 void set_buf(char* buf, char* path, char* filename)
 {
-	//dprint("[-] Setting Buffer to new path\n");
-
-	// printf("[-] length of path: %d | length of filename: %d\n", strlen(path), strlen(filename));
-
 	memset(buf, 0, MAX_BUF_SIZE);
 	strncpy(buf, path, strlen(path));
 	strncat(buf, "/", 1);
 	strncat(buf, filename, strlen(filename));
-
-	//dprint("[+] Finished setting buffer\n");
 }
